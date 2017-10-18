@@ -27,6 +27,14 @@ function islandora_solr_config_islandora_solr_primary_display() {
       'description' => t("Display search results as tabular output"),
       'configuration' => 'admin/islandora/search/islandora_solr/table_profile',
     ),
+    'grid' => array(
+      'name' => t('List-Annotations'),
+      'module' => 'islandora_solr_config',
+      'file' => 'includes/listannotations_results.inc',
+      'class' => "IslandoraSolrResultsListAnnotations",
+      'function' => "displayResults",
+      'description' => t("Display search results as a grid view"),
+    ),
   );
 }
 
@@ -101,6 +109,11 @@ function islandora_solr_config_theme() {
         'rows' => NULL,
         'elements' => array(),
       ),
+    ),
+    'islandora_solr_listannotations' => array(
+      'path' => $path . '/theme',
+      'template' => 'islandora-solr-listannotations',
+      'variables' => array('results' => NULL, 'elements' => array()),
     ),
   );
 }
