@@ -27,8 +27,6 @@ class IslandoraSolrResultsListannotations extends IslandoraSolrResults {
    * @return string
    *   Rendered Solr results.
    */
-
-
   public function printResults($solr_results) {
     $mod_path = drupal_get_path('module', 'islandora_solr_config');
     drupal_add_css("$mod_path/css/islandora_solr_config.theme.css");

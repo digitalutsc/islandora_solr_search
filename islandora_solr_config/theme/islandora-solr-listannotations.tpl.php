@@ -1,25 +1,26 @@
 <?php
 /**
  * @file
- * Islandora Solr grid template
+ * Islandora solr search primary results template file.
  *
  * Variables available:
  * - $results: Primary profile results array
  *
  * @see template_preprocess_islandora_solr()
  */
-?>
 
+?>
 <?php if (empty($results)): ?>
   <p class="no-results"><?php print t('Sorry, but your search returned no results.'); ?></p>
 <?php else: ?>
   <div class="islandora islandora-solr-search-results">
     <?php $row_result = 0; ?>
     <?php foreach($results as $key => $result): ?>
-
+      <!-- islandora_web_annotations related customizations -->
       <?php
-      if ($result['content_models'][0] == "info:fedora/islandora:WADMCModel") {
-        $parent_id = $result['solr_doc']["annotation_parent"]["value"];
+      $annotation_parent = $result['solr_doc']["annotation_parent"];
+      if ($result['content_models'][0] == "info:fedora/islandora:WADMCModel" && isset($annotation_parent)) {
+        $parent_id = $annotation_parent["value"];
         $parent_title = "";
         $parent_tn = drupal_get_path('module', 'islandora_solr') . '/images/defaultimg.png';
 
@@ -27,8 +28,9 @@
           $parent_title = $object->label;
           $parent_url = "/islandora/object/" . $parent_id;
           $parent_link = "<a href='" . $parent_url . "' title='". $parent_title . "'>" . $parent_title . "</a>";
+          $annotation_parent["value"] = $parent_link;
 
-          if ($tn = $object->getDatastream("TN")){
+          if ($tn = $object->getDatastream("TN")) {
             $parent_tn = $tn->label;
             $parent_tn = '/islandora/object/' . $parent_id . '/datastream/TN/view';
             $parent_tn_img_link = "<a href='" . $parent_url . "' title='". $parent_title . "'><img typeof='foaf:Image' src='". $parent_tn . "' alt='" . $parent_title . "'></a>";
@@ -51,10 +53,6 @@
           <!-- Metadata -->
           <dl class="solr-fields islandora-inline-metadata">
             <?php foreach($result['solr_doc'] as $key => $value): ?>
-              <?php if($value['label'] == 'annotation_parent') {
-                $value['value'] = $parent_link;
-              }
-              ?>
               <dt class="solr-label <?php print $value['class']; ?>">
                 <?php print $value['label']; ?>
               </dt>
@@ -63,14 +61,9 @@
               </dd>
             <?php endforeach; ?>
           </dl>
-
         </div>
       </div>
       <?php $row_result++; ?>
     <?php endforeach; ?>
   </div>
 <?php endif; ?>
-
-
-
-
