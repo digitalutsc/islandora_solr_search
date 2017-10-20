@@ -18,9 +18,9 @@
     <?php foreach($results as $key => $result): ?>
       <!-- islandora_web_annotations related customizations -->
       <?php
-      $annotation_parent = $result['solr_doc']["annotation_parent"];
-      if ($result['content_models'][0] == "info:fedora/islandora:WADMCModel" && isset($annotation_parent)) {
-        $parent_id = $annotation_parent["value"];
+      if ($result['content_models'][0] == "info:fedora/islandora:WADMCModel") {
+        $parent_id = $result['solr_doc']["annotation_parent"]["value"];
+
         $parent_title = "";
         $parent_tn = drupal_get_path('module', 'islandora_solr') . '/images/defaultimg.png';
 
@@ -28,9 +28,9 @@
           $parent_title = $object->label;
           $parent_url = "/islandora/object/" . $parent_id;
           $parent_link = "<a href='" . $parent_url . "' title='". $parent_title . "'>" . $parent_title . "</a>";
-          $annotation_parent["value"] = $parent_link;
+	  $result['solr_doc']["annotation_parent"]["value"] = $parent_link;
 
-          if ($tn = $object->getDatastream("TN")) {
+          if ($tn = $object->getDatastream("TN")){
             $parent_tn = $tn->label;
             $parent_tn = '/islandora/object/' . $parent_id . '/datastream/TN/view';
             $parent_tn_img_link = "<a href='" . $parent_url . "' title='". $parent_title . "'><img typeof='foaf:Image' src='". $parent_tn . "' alt='" . $parent_title . "'></a>";
@@ -67,3 +67,4 @@
     <?php endforeach; ?>
   </div>
 <?php endif; ?>
+
