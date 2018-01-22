@@ -26,9 +26,10 @@
 
         if ($object = islandora_object_load($parent_id)) {
           $parent_title = $object->label;
-          $parent_url = "/islandora/object/" . $parent_id;
+          $parent_url = "/islandora/object/" . $parent_id . "?annotationPID=" . $result["PID"];
           $parent_link = "<a href='" . $parent_url . "' title='". $parent_title . "'>" . $parent_title . "</a>";
-	  $result['solr_doc']["annotation_parent"]["value"] = $parent_link;
+
+	      $result['solr_doc']["annotation_parent"]["value"] = $parent_link;
 
           if ($tn = $object->getDatastream("TN")){
             $parent_tn = $tn->label;
